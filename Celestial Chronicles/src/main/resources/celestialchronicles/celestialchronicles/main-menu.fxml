@@ -9,8 +9,13 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
 
+    <!--<Circle fx:id="circle" fill="#6590b9" layoutX="312.0" layoutY="170.0" onMouseClicked="#circleClicked" opacity="0.41" radius="8.0" stroke="WHITE" strokeType="INSIDE">
+        <cursor>
+           <Cursor fx:constant="HAND" />
+        </cursor>
+     </Circle>-->
 
-    <Button layoutX="971.0" layoutY="504.0" onAction="#newGameClicked" text="Play" />
+    <Button layoutX="971.0" layoutY="504.0" onAction="#playClicked" text="Play" />
     <Button layoutX="960" layoutY="540" onAction="#settingsClicked" text="Settings" />
     <Button layoutX="972.0" layoutY="579.0" onAction="#exitClicked" text="Exit" />
 

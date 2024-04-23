@@ -7,6 +7,7 @@ module celestialchronicles.celestialchronicles {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires java.prefs;
+    requires java.desktop;
 
     opens celestialchronicles.celestialchronicles to javafx.fxml;
     exports celestialchronicles.celestialchronicles;
