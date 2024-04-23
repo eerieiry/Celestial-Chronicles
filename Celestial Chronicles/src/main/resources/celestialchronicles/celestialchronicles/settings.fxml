@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="celestialchronicles.celestialchronicles.MainMenuController">
+
+    <CheckBox fx:id="fullscreenCheckBox" layoutX="35.0" layoutY="62.0" onAction="#applySettings" text="Full screen" />
+    <Label layoutX="27.0" layoutY="28.0" prefHeight="0.0" prefWidth="169.0" text="Выберите разрешение экрана:" />
+    <ChoiceBox fx:id="resolutionChoiceBox" layoutX="219.0" layoutY="24.0">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="800x600" />
+                <String fx:value="1024x768" />
+                <String fx:value="1280x720" />
+                <String fx:value="1920x1080" />
+            </FXCollections>
+        </items>
+    </ChoiceBox>
+    <Button layoutX="276.0" layoutY="100.0" onAction="#applyClicked" prefWidth="181.0" text="Apply" />
+    <Button layoutX="276.0" layoutY="125.0" onAction="#backClicked" prefWidth="181.0" text="Back" />
+
+</AnchorPane>

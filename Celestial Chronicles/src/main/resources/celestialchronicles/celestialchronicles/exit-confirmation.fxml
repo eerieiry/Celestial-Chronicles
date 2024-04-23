@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<AnchorPane prefHeight="390.0" prefWidth="1063.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="celestialchronicles.celestialchronicles.MainMenuController">
+
+<padding>
+    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+</padding>
+   <children>
+      <Circle fx:id="circle" fill="#6590b9" layoutX="312.0" layoutY="170.0" onMouseClicked="#circleClicked" opacity="0.41" radius="8.0" stroke="WHITE" strokeType="INSIDE">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Circle>
+      <CheckBox layoutX="93.0" layoutY="121.0" mnemonicParsing="false" opacity="0.0" text="CheckBox">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </CheckBox>
+   </children>
+
+
+</AnchorPane>
