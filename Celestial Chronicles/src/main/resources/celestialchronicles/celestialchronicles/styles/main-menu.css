@@ -9,12 +9,20 @@
 .choice-box{
     -fx-font-family: Montserrat;
     -fx-cursor:pointer;
-    -fx-border-color: #e8e8cb;
+    -fx-border-color: #ededdf;
 }
 .button{
     -fx-background-color: #0b1645;
-    -fx-text-fill:  #e8e8cb;
-    -fx-border-color:  #e8e8cb;
+    -fx-text-fill:  #ededdf;
+    -fx-border-color:  #ededdf;
+    -fx-border-radius: 7px;
+    -fx-font-family: Montserrat;
+    -fx-cursor:pointer;
+}
+.button:hover{
+    -fx-background-color: #15287a;
+    -fx-text-fill:  #ededdf;
+    -fx-border-color:  #ededdf;
     -fx-border-radius: 7px;
     -fx-font-family: Montserrat;
     -fx-cursor:pointer;
@@ -25,38 +33,38 @@
 }
 
 .label{
-    -fx-text-fill:  #e8e8cb;
+    -fx-text-fill:  #ededdf;
 }
 
 .choice-box .context-menu {
-    -fx-background-color: #e8e8cb;
+    -fx-background-color: #ededdf;
 }
 
 .choice-box .menu-item:focused {
     -fx-background-color: #0b1645;
 }
 .choice-box .label:focused {
-    -fx-text-fill: #e8e8cb;
+    -fx-text-fill: #ededdf;
 }
 .choice-box .menu-item > .label {
     -fx-text-fill:#0b1645;
 }
 .choice-box .menu-item:focused > .label {
-    -fx-text-fill: #e8e8cb;
+    -fx-text-fill: #ededdf;
 }
 
 .choice-box {
     -fx-background-color: #0b1645;
-    -fx-border-color:  #e8e8cb;
+    -fx-border-color:  #ededdf;
     -fx-border-radius: 7px;
-    -fx-mark-color:  #e8e8cb;
+    -fx-mark-color:  #ededdf;
    }
 
 .choice-box > .label {
-    -fx-text-fill:  #e8e8cb;
+    -fx-text-fill:  #ededdf;
 }
 .slider .thumb {
-    -fx-background-color: #e8e8cb;
+    -fx-background-color: #ededdf;
     -fx-background-insets: 0, 1, 2;
     -fx-background-radius: 7px;
 }

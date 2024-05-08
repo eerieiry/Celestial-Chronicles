@@ -14,6 +14,7 @@ import java.util.Objects;
 public class MainMenu extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {
+
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main-menu.fxml")));
         Screen screen = Screen.getPrimary();
         double screenWidth = 1920;
@@ -24,10 +25,8 @@ public class MainMenu extends javafx.application.Application {
 
         stage.setTitle("Celestial Chronicles");
         stage.setScene(scene);
-        //stage.setFullScreen(true);
         stage.show();
     }
-
     public static void main(String[] args) {
         launch();
     }

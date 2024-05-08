@@ -8,7 +8,8 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="celestialchronicles.celestialchronicles.MainGame"
+            stylesheets="@styles/game-menu.css"
+            fx:controller="celestialchronicles.celestialchronicles.GameMenu"
             prefHeight="400.0" prefWidth="600.0">
-
+    <Button layoutX="870.0" layoutY="642.0" onAction="#guidebookClicked" prefWidth="181.0" text="Guidebook" />
 </AnchorPane>

@@ -1,0 +1,30 @@
+*{
+    -fx-font-family: Montserrat;
+    -fx-font-size: 18;
+    -fx-background-color: #142057;
+}
+.anchor-pane {
+    -fx-alignment: center;
+}
+
+.choice-box{
+    -fx-font-family: Montserrat;
+    -fx-cursor:pointer;
+    -fx-border-color: #ededdf;
+}
+.button{
+    -fx-background-color: #0b1645;
+    -fx-text-fill:  #ededdf;
+    -fx-border-color:  #ededdf;
+    -fx-border-radius: 7px;
+    -fx-font-family: Montserrat;
+    -fx-cursor:pointer;
+}
+.button:hover{
+    -fx-background-color: #15287a;
+    -fx-text-fill:  #ededdf;
+    -fx-border-color:  #ededdf;
+    -fx-border-radius: 7px;
+    -fx-font-family: Montserrat;
+    -fx-cursor:pointer;
+}

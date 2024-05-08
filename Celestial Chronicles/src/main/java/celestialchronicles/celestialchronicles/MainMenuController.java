@@ -20,9 +20,7 @@ public class MainMenuController {
     public static double screenHeight = 1080;
     public static boolean fullScreenBool = false;
 
-    //public Circle circle;
-
-    private void showMainMenuScreen(ActionEvent event) throws IOException {
+    public void showMainMenuScreen(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main-menu.fxml")));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, screenWidth, screenHeight);
@@ -33,6 +31,12 @@ public class MainMenuController {
 
     @FXML
     private void playClicked(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("game-menu.fxml")));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, screenWidth, screenHeight);
+        stage.setScene(scene);
+        stage.setFullScreen(fullScreenBool);
+        stage.show();
     }
 
     @FXML
@@ -41,10 +45,6 @@ public class MainMenuController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
-
-    //Settings
-    @FXML
-    private RadioButton fullscreenCheckBox;
     @FXML
     private ChoiceBox resolutionChoiceBox;
 
@@ -52,9 +52,9 @@ public class MainMenuController {
     private void settingsClicked(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("settings.fxml")));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, screenWidth, screenHeight);
+        Scene scene = new Scene(root, MainMenuController.screenWidth, MainMenuController.screenHeight);
         stage.setScene(scene);
-        stage.setFullScreen(fullScreenBool);
+        stage.setFullScreen(MainMenuController.fullScreenBool);
         stage.show();
     }
 
@@ -94,19 +94,10 @@ public class MainMenuController {
             default: System.out.println("Invalid resolution size");
         }
         settingsClicked(event);
-        //stage.setX((screen.getBounds().getWidth() - screenWidth)/2);
-        //stage.setY((screen.getBounds().getHeight() - screenHeight)/2);
     }
 
     @FXML
     public void backClicked(ActionEvent event) throws IOException {
-        showMainMenuScreen(event);
+     showMainMenuScreen(event);
     }
-
-
-
-   /*public void circleClicked(MouseEvent mouseEvent) {
-        Circle circle =(Circle)event.getSource();
-        circle.setFill(Color.OLIVEDRAB);
-    }*/
 }
