@@ -8,8 +8,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.DragEvent;
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -20,8 +25,21 @@ public class MainMenuController {
     public static double screenHeight = 1080;
     public static boolean fullScreenBool = false;
 
-    public void showMainMenuScreen(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main-menu.fxml")));
+    public static void playAudioAndLoadNextScene(ActionEvent event, Parent root) throws IOException {
+        Media sound = new Media(Objects.requireNonNull(MainMenuController.class.getResource("click.mp3")).toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.setOnEndOfMedia(() -> {
+            try {
+                loadNextScene(event, root);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        mediaPlayer.play();
+    }
+
+    public static void loadNextScene(ActionEvent event, Parent root) throws IOException {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, screenWidth, screenHeight);
         stage.setScene(scene);
@@ -29,14 +47,15 @@ public class MainMenuController {
         stage.show();
     }
 
+    public void showMainMenuScreen(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main-menu.fxml")));
+        playAudioAndLoadNextScene(event, root);
+    }
+
     @FXML
     private void playClicked(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("game-menu.fxml")));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, screenWidth, screenHeight);
-        stage.setScene(scene);
-        stage.setFullScreen(fullScreenBool);
-        stage.show();
+        playAudioAndLoadNextScene(event, root);
     }
 
     @FXML
@@ -51,11 +70,7 @@ public class MainMenuController {
     @FXML
     private void settingsClicked(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("settings.fxml")));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, MainMenuController.screenWidth, MainMenuController.screenHeight);
-        stage.setScene(scene);
-        stage.setFullScreen(MainMenuController.fullScreenBool);
-        stage.show();
+        playAudioAndLoadNextScene(event, root);
     }
 
     @FXML

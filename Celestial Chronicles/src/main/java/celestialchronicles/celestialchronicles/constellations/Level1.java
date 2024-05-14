@@ -1,5 +1,6 @@
-package celestialchronicles.celestialchronicles;
+package celestialchronicles.celestialchronicles.constellations;
 
+import celestialchronicles.celestialchronicles.MainMenuController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -23,27 +25,23 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 
-public class GuidebookPractice {
+public class Level1 {
 
-    public AnchorPane container;
-    public AnchorPane anchorPane;
-    @FXML
-    private TextField searchField;
-    @FXML
-    private ListView<String> constellationsListView;
-
+    public Label timerLabel;
+    public Label constellationsCompletedLabel;
     private Connection connection;
-
+    public AnchorPane container;
     private final Set<Line> drawnLines = new HashSet<>();
     private int winningLineCount = 0;
     private int MainStars = 0;
     private double[] initialCircleLayoutX = new double[MainStars];
     private double[] initialCircleLayoutY =new double[MainStars];
     private double[][] requiredLines;
+    private final int LEVEL = 1;
 
     public void initialize() {
         connectToDatabase();
-        loadConstellations();
+        displayLevelConstellations(LEVEL, container);
         if (container != null) {
             for (Node node : container.getChildren()) {
                 if (node instanceof Circle circle) {
@@ -66,34 +64,27 @@ public class GuidebookPractice {
         }
     }
 
-    private void loadConstellations() {
-        ObservableList<String> constellations = FXCollections.observableArrayList();
+    public void displayLevelConstellations(int level, AnchorPane container) {
         try {
-            String query = "SELECT Name FROM constellations";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
+            String query = "SELECT constellations.Name " +
+                    "FROM levels " +
+                    "JOIN constellations ON levels.constellation_id = constellations.id " +
+                    "WHERE levels.level = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, level);
+            ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                String name = resultSet.getString("Name");
-                constellations.add(name);
+                String constellationName = resultSet.getString("Name");
+                displayConstellationCircles(constellationName, container);
             }
-
-            constellationsListView.setItems(constellations);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void search(ActionEvent actionEvent) {
-        String searchTerm = searchField.getText();
-        displayConstellationInfo(searchTerm);
-    }
-    private void displayConstellationInfo(String searchTerm) {
-        String selectedConstellation = constellationsListView.getSelectionModel().getSelectedItem();
-        displayConstellationCircles(selectedConstellation);
-    }
 
-    private void displayConstellationCircles(String constellationName){
+    private void displayConstellationCircles(String constellationName, AnchorPane container) {
 
         try {
             String query = "SELECT * FROM constellations WHERE Name = ?";
@@ -101,24 +92,15 @@ public class GuidebookPractice {
             statement.setString(1, constellationName);
             ResultSet resultSet = statement.executeQuery();
 
-            container = (AnchorPane) constellationsListView.getScene().lookup("#container");
-            container.getChildren().clear();
-
             if (resultSet.next()) {
                 int CONSTELLATION_ID = Integer.parseInt(resultSet.getString("id"));
-                String imagePath = resultSet.getString("Image");
-                if (imagePath != null && !imagePath.isEmpty()) {
-                    ImageView constellationImage = new ImageView(new Image(new FileInputStream(imagePath)));
-                    constellationImage.setFitWidth(1284);
-                    constellationImage.setFitHeight(906);
-                    container.getChildren().add(constellationImage);
-                }
 
                 winningLineCount = getWinningLineCountFromDB(CONSTELLATION_ID);
                 MainStars = getMainStars(CONSTELLATION_ID);
                 loadInitialStarPositions(CONSTELLATION_ID);
                 requiredLines = loadRequiredLines(CONSTELLATION_ID);
 
+                // Загружаем и добавляем круги
                 query = "SELECT * FROM stars WHERE id_constellation = ?";
                 statement = connection.prepareStatement(query);
                 statement.setInt(1, resultSet.getInt("id"));
@@ -134,12 +116,14 @@ public class GuidebookPractice {
                     container.getChildren().add(circle);
 
 
+                    // Добавить прозрачный круг
                     double transparentRadius = starsResultSet.getDouble("radius_transparent");
                     Circle transparentCircle = new Circle(centerX, centerY, transparentRadius);
                     transparentCircle.setFill(Color.TRANSPARENT);
                     container.getChildren().add(transparentCircle);
                     transparentCircle.setOnMouseClicked((MouseEvent event) -> onCircleClicked(event));
 
+                    // Создаем кнопки
                     Button deleteLineButton = new Button("Delete Line");
                     deleteLineButton.setLayoutX(1089.0);
                     deleteLineButton.setLayoutY(788.0);
@@ -155,7 +139,7 @@ public class GuidebookPractice {
                     container.getChildren().add(clearButton);
                 }
             }
-        } catch (SQLException | FileNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -172,7 +156,6 @@ public class GuidebookPractice {
         }
         else {
             currentCircle.setFill(javafx.scene.paint.Color.rgb(232, 232, 203, 0.5));
-            previousCircle.setFill(javafx.scene.paint.Color.rgb(232, 232, 203, 0));
             boolean lineExists = false;
             for (Line line : drawnLines) {
                 if ((line.getStartX() == previousCircle.getLayoutX() + previousCircle.getRadius() &&
@@ -240,6 +223,7 @@ public class GuidebookPractice {
 
     public void showGameEndMessage() {
 
+        // Створення повідомлення
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Congratulations!");
         alert.setHeaderText("You've successfully completed the constellation.");
@@ -253,12 +237,13 @@ public class GuidebookPractice {
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/celestialchronicles/celestialchronicles/styles/images/icon.png")));
 
-
+        // Додавання кнопок для виходу або перезапуску рівня
         ButtonType exitButton = new ButtonType("Exit");
         ButtonType restartButton = new ButtonType("Restart Level");
 
         alert.getButtonTypes().setAll(exitButton, restartButton);
 
+        // Обробка вибору користувача
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent()) {
             if (result.get() == exitButton) {
@@ -362,25 +347,6 @@ public class GuidebookPractice {
         drawnLines.clear();
     }
 
-    public void displaySelectedConstellation(MouseEvent mouseEvent) {
-        String selectedConstellation = constellationsListView.getSelectionModel().getSelectedItem();
-        displayConstellationInfo(selectedConstellation);
-    }
-
-    public void backClicked(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("game-menu.fxml")));
-        MainMenuController.playAudioAndLoadNextScene(actionEvent, root);
-    }
-
-    public void knowledgeClicked(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("guidebook-knowledge.fxml")));
-        MainMenuController.playAudioAndLoadNextScene(actionEvent, root);
-    }
-
-    public void constellationsClicked(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("guidebook-constellations.fxml")));
-        MainMenuController.playAudioAndLoadNextScene(actionEvent, root);
-    }
     private int getWinningLineCountFromDB(int constellationId) throws SQLException {
         String query = "SELECT WinLines FROM constellations WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -422,14 +388,9 @@ public class GuidebookPractice {
             e.printStackTrace();
         }
     }
-
     private double[][] loadRequiredLines(int constellationId) {
         try {
-            String query = "SELECT s1.x AS start_x, s1.y AS start_y, s2.x AS end_x, s2.y AS end_y " +
-                    "FROM constellation_pattern cp " +
-                    "JOIN stars s1 ON cp.start = s1.id " +
-                    "JOIN stars s2 ON cp.end = s2.id " +
-                    "WHERE cp.constellations_id = ?";
+            String query = "SELECT start_x, start_y, end_x, end_y FROM constellation_pattern WHERE constellations_id = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setInt(1, constellationId);
                 ResultSet resultSet = statement.executeQuery();
@@ -448,6 +409,4 @@ public class GuidebookPractice {
             return new double[0][];
         }
     }
-
 }
-

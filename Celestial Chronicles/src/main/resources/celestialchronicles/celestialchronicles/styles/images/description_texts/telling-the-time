@@ -1,0 +1,31 @@
+A Counter-Clockwise Star Clock
+
+1. Find the Big Dipper and the North Star.
+2. Picture a clock with the North Star at its center, and draw an
+imaginary line starting from the North Star through the 2 pointer
+stars of the Big Dipper—Dubhe and Merak. Assume that this is the hour
+hand of your imaginary star clock.
+3. The clock you just created in the sky is a 24-hour clock. Unlike on
+a regular analog clock face where an hour takes up 30 degrees of a full
+circle, the imaginary hour hand on the star clock moves only 15 degrees
+per hour. What's more, this hour hand moves counter-clockwise.
+4. Draw another imaginary line straight up from the North Star. This line
+will mark midnight or the passing of 24 hours.
+
+Calculating Time
+
+To tell time, look at where the hour hand points to in relation to the
+reference line.
+Now, look at the calendar for the date. If it is March 6, you do not need
+to do any calculations. The time on your imaginary clock will be the
+actual time. For example, if the pointer hour hand points straight
+to the top of the imaginary clock, the time will be midnight. If it
+points 30 degrees to the right of the reference line, the time would be
+22:00 or 10 pm.
+To calculate times for different months, you will need to do the
+following calculation:
+Time = Dipper Time – 2 X (the number of months since March 6).
+The time you get will be a rough estimate and may be off by about 30
+minutes as compared to a clock.
+To account for Daylight Saving Time (DST), add 1 hour to the
+calculation in the months that DST is in place at your location.

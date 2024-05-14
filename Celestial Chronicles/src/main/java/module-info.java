@@ -9,6 +9,7 @@ module celestialchronicles.celestialchronicles {
     requires java.prefs;
     requires java.desktop;
     requires java.sql;
+    requires javafx.media;
 
     opens celestialchronicles.celestialchronicles to javafx.fxml;
     exports celestialchronicles.celestialchronicles;

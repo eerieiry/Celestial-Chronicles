@@ -123,29 +123,17 @@ public class GuidebookConstellations {
 
     public void backClicked(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("game-menu.fxml")));
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, MainMenuController.screenWidth, MainMenuController.screenHeight);
-        stage.setScene(scene);
-        stage.setFullScreen(MainMenuController.fullScreenBool);
-        stage.show();
+        MainMenuController.playAudioAndLoadNextScene(actionEvent, root);
     }
 
     public void practiceClicked(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("guidebook-practice.fxml")));
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, MainMenuController.screenWidth, MainMenuController.screenHeight);
-        stage.setScene(scene);
-        stage.setFullScreen(MainMenuController.fullScreenBool);
-        stage.show();
+        MainMenuController.playAudioAndLoadNextScene(actionEvent, root);
     }
 
     public void knowledgeClicked(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("guidebook-knowledge.fxml")));
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, MainMenuController.screenWidth, MainMenuController.screenHeight);
-        stage.setScene(scene);
-        stage.setFullScreen(MainMenuController.fullScreenBool);
-        stage.show();
+        MainMenuController.playAudioAndLoadNextScene(actionEvent, root);
     }
 
 }

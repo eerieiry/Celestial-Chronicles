@@ -16,9 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.sql.*;
 import java.util.Objects;
 
@@ -80,18 +78,29 @@ public class GuidebookKnowledge {
     }
     private void displayConstellationInfo(String searchTerm) {
         try {
-            String query = "SELECT * FROM constellations WHERE Name LIKE ?";
+            String query = "SELECT * FROM knowledge WHERE Name LIKE ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, "%" + searchTerm + "%");
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
                 String name = resultSet.getString("Name");
-                String description = resultSet.getString("Description");
+                String descriptionFilePath  = resultSet.getString("Description");
                 String imagePath = resultSet.getString("Picture");
 
                 nameLabel.setText(name);
-                nameLabel.setText(description);
+
+                StringBuilder descriptionBuilder = new StringBuilder();
+                try (BufferedReader reader = new BufferedReader(new FileReader(descriptionFilePath ))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        descriptionBuilder.append(line).append("\n");
+                    }
+                }
+
+                String description = descriptionBuilder.toString();
+                descriptionLabel.setText(description);
+
                 imageView.setImage(new Image(new FileInputStream(imagePath)));
             } else {
                 nameLabel.setText("Information not found");
@@ -99,7 +108,7 @@ public class GuidebookKnowledge {
                 imageView.setImage(null);
             }
 
-        } catch (SQLException | FileNotFoundException e) {
+        } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -111,28 +120,16 @@ public class GuidebookKnowledge {
 
     public void backClicked(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("game-menu.fxml")));
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, MainMenuController.screenWidth, MainMenuController.screenHeight);
-        stage.setScene(scene);
-        stage.setFullScreen(MainMenuController.fullScreenBool);
-        stage.show();
+        MainMenuController.playAudioAndLoadNextScene(actionEvent, root);
     }
 
     public void practiceClicked(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("guidebook-practice.fxml")));
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, MainMenuController.screenWidth, MainMenuController.screenHeight);
-        stage.setScene(scene);
-        stage.setFullScreen(MainMenuController.fullScreenBool);
-        stage.show();
+        MainMenuController.playAudioAndLoadNextScene(actionEvent, root);
     }
 
     public void constellationsClicked(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("guidebook-constellations.fxml")));
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, MainMenuController.screenWidth, MainMenuController.screenHeight);
-        stage.setScene(scene);
-        stage.setFullScreen(MainMenuController.fullScreenBool);
-        stage.show();
+        MainMenuController.playAudioAndLoadNextScene(actionEvent, root);
     }
 }
