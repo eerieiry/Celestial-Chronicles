@@ -5,16 +5,15 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 import java.io.*;
 import java.sql.*;
@@ -120,16 +119,16 @@ public class GuidebookKnowledge {
 
     public void backClicked(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("game-menu.fxml")));
-        MainMenuController.playAudioAndLoadNextScene(actionEvent, root);
+        AudioManager.playAudioAndLoadNextScene(actionEvent, root);
     }
 
     public void practiceClicked(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("guidebook-practice.fxml")));
-        MainMenuController.playAudioAndLoadNextScene(actionEvent, root);
+        AudioManager.playAudioAndLoadNextScene(actionEvent, root);
     }
 
     public void constellationsClicked(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("guidebook-constellations.fxml")));
-        MainMenuController.playAudioAndLoadNextScene(actionEvent, root);
+        AudioManager.playAudioAndLoadNextScene(actionEvent, root);
     }
 }

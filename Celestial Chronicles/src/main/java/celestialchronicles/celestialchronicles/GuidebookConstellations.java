@@ -123,17 +123,17 @@ public class GuidebookConstellations {
 
     public void backClicked(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("game-menu.fxml")));
-        MainMenuController.playAudioAndLoadNextScene(actionEvent, root);
+        AudioManager.playAudioAndLoadNextScene(actionEvent, root);
     }
 
     public void practiceClicked(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("guidebook-practice.fxml")));
-        MainMenuController.playAudioAndLoadNextScene(actionEvent, root);
+        AudioManager.playAudioAndLoadNextScene(actionEvent, root);
     }
 
     public void knowledgeClicked(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("guidebook-knowledge.fxml")));
-        MainMenuController.playAudioAndLoadNextScene(actionEvent, root);
+        AudioManager.playAudioAndLoadNextScene(actionEvent, root);
     }
 
 }

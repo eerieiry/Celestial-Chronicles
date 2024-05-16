@@ -3,7 +3,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@styles/game-menu.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="celestialchronicles.celestialchronicles.GameMenu">
-    <Button layoutX="870.0" layoutY="642.0" onAction="#guidebookClicked" prefWidth="181.0" text="Guidebook" />
-    <Button layoutX="870.0" layoutY="592.0" onAction="#level1Clicked" prefWidth="181.0" text="Level 1" />
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" stylesheets="@styles/game-menu.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="celestialchronicles.celestialchronicles.GameMenu">
+    <Button layoutX="1725.0" layoutY="20.0" onAction="#guidebookClicked" prefWidth="181.0" styleClass="simple-button" text="Guidebook" />
+    <Button layoutX="448.0" layoutY="440.0" maxHeight="250.0" maxWidth="250.0" onAction="#level1Clicked" prefHeight="186.0" prefWidth="204.0" style="-fx-font-size: 68;" styleClass="star-button" text="1" />
+   <Button styleClass="star-button" layoutX="677.0" layoutY="440.0" onAction="#level2Clicked" prefHeight="186.0" prefWidth="250.0" text="2" style="-fx-font-size: 68;"/>
+   <Button styleClass="star-button" layoutX="900.0" layoutY="440.0" onAction="#level3Clicked" prefHeight="186.0" prefWidth="250.0" text="3" style="-fx-font-size: 68;"/>
+   <Button styleClass="star-button" layoutX="1127.0" layoutY="440.0" onAction="#level4Clicked" prefHeight="186.0" prefWidth="250.0" text="4" style="-fx-font-size: 68;"/>
+   <Button styleClass="star-button" layoutX="1353.0" layoutY="440.0" onAction="#level5Clicked" prefHeight="186.0" prefWidth="250.0" text="5" style="-fx-font-size: 68;"/>
+   <Button layoutX="14.0" layoutY="14.0" onAction="#menuClicked" prefWidth="181.0" styleClass="simple-button" text="Menu" />
 </AnchorPane>

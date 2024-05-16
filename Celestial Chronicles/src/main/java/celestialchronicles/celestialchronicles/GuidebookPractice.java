@@ -13,6 +13,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -164,6 +166,10 @@ public class GuidebookPractice {
 
     @FXML
     private void onCircleClicked(javafx.scene.input.MouseEvent event) {
+        MediaPlayer starClickMediaPlayer = AudioManager.getStarClickMediaPlayer();
+
+        starClickMediaPlayer.stop();
+        starClickMediaPlayer.play();
 
         Circle currentCircle = (Circle) event.getSource();
 
@@ -221,6 +227,8 @@ public class GuidebookPractice {
     }
 
     private void showIncorrectPatternMessage() {
+        MediaPlayer errorMediaPlayer = AudioManager.getErrorMediaPlayer();
+        errorMediaPlayer.play();
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Incorrect Pattern");
         alert.setHeaderText("Incorrect Pattern!");
@@ -239,7 +247,8 @@ public class GuidebookPractice {
     }
 
     public void showGameEndMessage() {
-
+        MediaPlayer successMediaPlayer = AudioManager.getSuccessMediaPlayer();
+        successMediaPlayer.play();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Congratulations!");
         alert.setHeaderText("You've successfully completed the constellation.");
@@ -369,17 +378,17 @@ public class GuidebookPractice {
 
     public void backClicked(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("game-menu.fxml")));
-        MainMenuController.playAudioAndLoadNextScene(actionEvent, root);
+        AudioManager.playAudioAndLoadNextScene(actionEvent, root);
     }
 
     public void knowledgeClicked(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("guidebook-knowledge.fxml")));
-        MainMenuController.playAudioAndLoadNextScene(actionEvent, root);
+        AudioManager.playAudioAndLoadNextScene(actionEvent, root);
     }
 
     public void constellationsClicked(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("guidebook-constellations.fxml")));
-        MainMenuController.playAudioAndLoadNextScene(actionEvent, root);
+        AudioManager.playAudioAndLoadNextScene(actionEvent, root);
     }
     private int getWinningLineCountFromDB(int constellationId) throws SQLException {
         String query = "SELECT WinLines FROM constellations WHERE id = ?";

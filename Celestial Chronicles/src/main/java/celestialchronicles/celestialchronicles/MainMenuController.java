@@ -17,6 +17,9 @@ import javafx.util.Duration;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.ResourceBundle;
+
+import static celestialchronicles.celestialchronicles.AudioManager.playAudioAndLoadNextScene;
 
 public class MainMenuController {
 
@@ -25,27 +28,8 @@ public class MainMenuController {
     public static double screenHeight = 1080;
     public static boolean fullScreenBool = false;
 
-    public static void playAudioAndLoadNextScene(ActionEvent event, Parent root) throws IOException {
-        Media sound = new Media(Objects.requireNonNull(MainMenuController.class.getResource("click.mp3")).toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.setOnEndOfMedia(() -> {
-            try {
-                loadNextScene(event, root);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
 
-        mediaPlayer.play();
-    }
 
-    public static void loadNextScene(ActionEvent event, Parent root) throws IOException {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, screenWidth, screenHeight);
-        stage.setScene(scene);
-        stage.setFullScreen(fullScreenBool);
-        stage.show();
-    }
 
     public void showMainMenuScreen(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main-menu.fxml")));
