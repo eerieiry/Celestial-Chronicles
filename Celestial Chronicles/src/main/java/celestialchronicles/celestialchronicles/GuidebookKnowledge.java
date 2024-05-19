@@ -8,20 +8,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 
 import java.io.*;
 import java.sql.*;
 import java.util.Objects;
 
+import static celestialchronicles.celestialchronicles.Database.*;
+
 public class GuidebookKnowledge {
-    @FXML
-    private TextField searchField;
 
     @FXML
     private Label nameLabel;
@@ -35,22 +32,10 @@ public class GuidebookKnowledge {
     @FXML
     private ListView<String> constellationsListView;
 
-    private Connection connection;
 
     public void initialize() {
         connectToDatabase();
         loadConstellations();
-    }
-
-    private void connectToDatabase() {
-        try {
-            String url = "jdbc:mysql://localhost:4044/constellationsdb?user=root";
-            String username = "root";
-            String password = "12345";
-            connection = DriverManager.getConnection(url, username, password);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     private void loadConstellations() {
@@ -71,10 +56,6 @@ public class GuidebookKnowledge {
         }
     }
 
-    public void search(ActionEvent actionEvent) {
-        String searchTerm = searchField.getText();
-        displayConstellationInfo(searchTerm);
-    }
     private void displayConstellationInfo(String searchTerm) {
         try {
             String query = "SELECT * FROM knowledge WHERE Name LIKE ?";
@@ -84,13 +65,13 @@ public class GuidebookKnowledge {
 
             if (resultSet.next()) {
                 String name = resultSet.getString("Name");
-                String descriptionFilePath  = resultSet.getString("Description");
+                String descriptionFilePath = resultSet.getString("Description");
                 String imagePath = resultSet.getString("Picture");
 
                 nameLabel.setText(name);
 
                 StringBuilder descriptionBuilder = new StringBuilder();
-                try (BufferedReader reader = new BufferedReader(new FileReader(descriptionFilePath ))) {
+                try (BufferedReader reader = new BufferedReader(new FileReader(descriptionFilePath))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         descriptionBuilder.append(line).append("\n");

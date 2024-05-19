@@ -7,23 +7,29 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #0b1645;" stylesheets="@styles/guide.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="celestialchronicles.celestialchronicles.GuidebookKnowledge">
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" styleClass="main-anchor-pane" stylesheets="@styles/guide.css"
+            xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="celestialchronicles.celestialchronicles.GuidebookKnowledge">
     <children>
-      <Button layoutX="72.0" layoutY="41.0" onAction="#constellationsClicked" prefHeight="41.0" prefWidth="214.0" text="Constellations" />
-      <Button layoutX="72.0" layoutY="95.0" onAction="#practiceClicked" prefHeight="41.0" prefWidth="214.0" text="Practice" />
-      <Button layoutX="72.0" layoutY="150.0" prefHeight="41.0" prefWidth="214.0" style="-fx-background-color: #ededdf; -fx-text-fill: #0b1645; -fx-border-color: #0b1645; fx-border-radius: 20px;" text="Knowledge" />
-      <Pane layoutX="276.0" layoutY="34.0" prefHeight="906.0" prefWidth="1284.0" style="-fx-background-color: ededdf;">
-         <children>
-              <ImageView fx:id="imageView" fitHeight="448.0" fitWidth="609.0" layoutX="641.0" layoutY="242.0" />
-              <Label fx:id="descriptionLabel" layoutX="35.0" layoutY="36.0" prefHeight="851.0" prefWidth="571.0" />
-              <Label fx:id="nameLabel" layoutX="679.0" layoutY="175.0" prefHeight="40.0" prefWidth="571.0" style="-fx-font-size: 28" />
-         </children>
-      </Pane>
-        <Button layoutX="870.0" layoutY="973.0" onAction="#backClicked" prefWidth="181.0" text="Back" />
-      <Pane layoutX="1601.0" layoutY="34.0" prefHeight="906.0" prefWidth="286.0" style="-fx-background-color: ededdf;">
-         <children>
-              <ListView fx:id="constellationsListView" onMouseClicked="#displaySelectedConstellation" prefHeight="906.0" prefWidth="286.0" style="-fx-cursor: pointer; -fx-border-color: ededdf; -fx-background-color: ededdf;" styleClass="list-view" />
-         </children>
-      </Pane>
+        <Button layoutX="72.0" layoutY="41.0" onAction="#constellationsClicked" prefHeight="41.0" prefWidth="214.0"
+                text="Constellations"/>
+        <Button layoutX="72.0" layoutY="95.0" onAction="#practiceClicked" prefHeight="41.0" prefWidth="214.0"
+                text="Practice"/>
+        <Button layoutX="72.0" layoutY="150.0" prefHeight="41.0" prefWidth="214.0" styleClass="highlighted-button"/>
+        <Pane layoutX="276.0" layoutY="34.0" prefHeight="906.0" prefWidth="1284.0" styleClass="other-pane">
+            <children>
+                <ImageView fx:id="imageView" fitHeight="448.0" fitWidth="609.0" layoutX="641.0" layoutY="242.0"/>
+                <Label fx:id="descriptionLabel" layoutX="35.0" layoutY="36.0" prefHeight="851.0" prefWidth="571.0"/>
+                <Label fx:id="nameLabel" layoutX="679.0" layoutY="175.0" prefHeight="40.0" prefWidth="571.0"
+                       style="-fx-font-size: 28"/>
+            </children>
+        </Pane>
+        <Button layoutX="870.0" layoutY="973.0" onAction="#backClicked" prefWidth="181.0" text="Back"/>
+        <Pane layoutX="1601.0" layoutY="34.0" prefHeight="906.0" prefWidth="286.0" styleClass="other-pane">
+            <children>
+                <ListView fx:id="constellationsListView" onMouseClicked="#displaySelectedConstellation"
+                          prefHeight="906.0" prefWidth="286.0" styleClass="list-view"/>
+            </children>
+        </Pane>
     </children>
 </AnchorPane>

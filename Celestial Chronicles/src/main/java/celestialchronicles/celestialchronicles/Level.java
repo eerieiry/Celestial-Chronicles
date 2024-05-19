@@ -1,7 +1,6 @@
 package celestialchronicles.celestialchronicles;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,66 +17,99 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
+import static celestialchronicles.celestialchronicles.AudioManager.*;
+import static celestialchronicles.celestialchronicles.Database.*;
+
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 
-import static celestialchronicles.celestialchronicles.AudioManager.getStarClickMediaPlayer;
-import static celestialchronicles.celestialchronicles.Database.*;
+public class Level {
 
-public class GuidebookPractice {
+    public static int LEVEL;
 
     public AnchorPane container;
-    public AnchorPane anchorPane;
-
-    @FXML
-    private ListView<String> constellationsListView;
-
     private final Set<Line> drawnLines = new HashSet<>();
+    public Label timerLabel;
     private int winningLineCount = 0;
     private int MainStars = 0;
     private double[] initialCircleLayoutX = new double[MainStars];
     private double[] initialCircleLayoutY = new double[MainStars];
     private double[][] requiredLines;
+    private List<String> constellationNames = new ArrayList<>();
+    private double points = 0;
+    private Timeline timer;
+    private double elapsedTimeSeconds;
+    @FXML
+    private Label name;
 
-    public void initialize() {
+    public void initialize() throws SQLException, IOException {
         connectToDatabase();
-        loadConstellations();
-        if (container != null) {
-            for (Node node : container.getChildren()) {
-                if (node instanceof Circle circle) {
-                    circle.setOnMouseClicked(this::onCircleClicked);
-                }
+        constellationNames = getConstellationNames(LEVEL);
+        loadNextConstellation();
+        startTimer();
+
+    }
+
+    private int currentConstellationIndex = 0;
+
+    private void loadNextConstellation() throws SQLException, IOException {
+        if (currentConstellationIndex < constellationNames.size()) {
+            String constellationName = constellationNames.get(currentConstellationIndex);
+            if (constellationName != null) {
+                Platform.runLater(() -> {
+                    clearCurrentConstellation();
+                    displayConstellationCircles(constellationName);
+                    currentConstellationIndex++;
+                    clue.getChildren().clear();
+                });
+            } else {
             }
         } else {
-            System.err.println("AnchorPane is null. Please check your FXML file.");
+            stopTimer();
+            finishLevel();
+            showLevelEndMessage();
         }
     }
 
+    private void showLevelEndMessage() throws IOException {
+        MediaPlayer successMediaPlayer = AudioManager.getSuccessMediaPlayer();
+        if (!AudioManager.mute) {
+            successMediaPlayer.play();
+        }
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Congratulations!");
+        alert.setHeaderText("You've completed the level.");
 
-    private void loadConstellations() {
-        ObservableList<String> constellations = FXCollections.observableArrayList();
-        try {
-            String query = "SELECT Name FROM constellations";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
+        Image image = new Image(getClass().getResource("/celestialchronicles/celestialchronicles/styles/images/icon.png").toExternalForm());
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(100);
+        alert.setGraphic(imageView);
 
-            while (resultSet.next()) {
-                String name = resultSet.getString("Name");
-                constellations.add(name);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/celestialchronicles/celestialchronicles/styles/images/icon.png")));
+
+
+        ButtonType exitButton = new ButtonType("Exit");
+
+        alert.getButtonTypes().setAll(exitButton);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent()) {
+            if (result.get() == exitButton) {
             }
-
-            constellationsListView.setItems(constellations);
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
-    private void displayConstellationInfo(String searchTerm) {
-        String selectedConstellation = constellationsListView.getSelectionModel().getSelectedItem();
-        displayConstellationCircles(selectedConstellation);
+    private void clearCurrentConstellation() {
+        container.getChildren().clear();
     }
 
     private void displayConstellationCircles(String constellationName) {
@@ -88,9 +120,6 @@ public class GuidebookPractice {
             statement.setString(1, constellationName);
             ResultSet resultSet = statement.executeQuery();
 
-            container = (AnchorPane) constellationsListView.getScene().lookup("#container");
-            container.getChildren().clear();
-
             if (resultSet.next()) {
                 int CONSTELLATION_ID = Integer.parseInt(resultSet.getString("id"));
                 String imagePath = resultSet.getString("Image");
@@ -100,6 +129,7 @@ public class GuidebookPractice {
                     constellationImage.setFitHeight(906);
                     container.getChildren().add(constellationImage);
                 }
+                name.setText(constellationName);
 
                 winningLineCount = getWinningLineCountFromDB(CONSTELLATION_ID);
                 MainStars = getMainStars(CONSTELLATION_ID);
@@ -125,7 +155,13 @@ public class GuidebookPractice {
                     Circle transparentCircle = new Circle(centerX, centerY, transparentRadius);
                     transparentCircle.setFill(Color.TRANSPARENT);
                     container.getChildren().add(transparentCircle);
-                    transparentCircle.setOnMouseClicked((MouseEvent event) -> onCircleClicked(event));
+                    transparentCircle.setOnMouseClicked((MouseEvent event) -> {
+                        try {
+                            onCircleClicked(event);
+                        } catch (SQLException | IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
 
                     Button deleteLineButton = new Button("Delete Line");
                     deleteLineButton.setLayoutX(1089.0);
@@ -152,7 +188,15 @@ public class GuidebookPractice {
                     checkButton.setLayoutX(1181.5);
                     checkButton.setLayoutY(733.0);
                     checkButton.setPrefWidth(85.0);
-                    checkButton.setOnAction(e -> checkClicked());
+                    checkButton.setOnAction(e -> {
+                        try {
+                            checkClicked();
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    });
                     container.getChildren().add(checkButton);
                 }
             }
@@ -161,21 +205,23 @@ public class GuidebookPractice {
         }
     }
 
-
-    private void checkClicked() {
+    private void checkClicked() throws SQLException, IOException {
         if (isPatternMatched()) {
-            resetLastClickedCircle();
+            incrementPoints();
             showGameEndMessage();
-        } else {
+            loadNextConstellation();
             resetLastClickedCircle();
+        } else {
             showIncorrectPatternMessage();
+            loadNextConstellation();
+            resetLastClickedCircle();
         }
     }
 
     private Circle previousCircle;
 
     @FXML
-    private void onCircleClicked(javafx.scene.input.MouseEvent event) {
+    private void onCircleClicked(javafx.scene.input.MouseEvent event) throws SQLException, IOException {
         MediaPlayer starClickMediaPlayer = getStarClickMediaPlayer();
 
         if (!AudioManager.mute) {
@@ -270,12 +316,11 @@ public class GuidebookPractice {
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/celestialchronicles/celestialchronicles/styles/images/icon.png")));
 
-
         exitLevel(alert);
     }
 
     private void exitLevel(Alert alert) {
-        ButtonType restartButton = new ButtonType("Restart Level");
+        ButtonType restartButton = new ButtonType("Next Level");
 
         alert.getButtonTypes().setAll(restartButton);
 
@@ -288,7 +333,6 @@ public class GuidebookPractice {
     }
 
     private void resetElementPositions() {
-        resetLastClickedCircle();
         int numElements = Math.min(container.getChildren().size(), Math.min(initialCircleLayoutX.length, initialCircleLayoutY.length));
         int i = 0;
         for (Node node : container.getChildren()) {
@@ -301,7 +345,6 @@ public class GuidebookPractice {
     }
 
     private void removeLines() {
-        resetLastClickedCircle();
         container.getChildren().removeAll(drawnLines);
         drawnLines.clear();
     }
@@ -369,38 +412,6 @@ public class GuidebookPractice {
         drawnLines.clear();
     }
 
-    public void displaySelectedConstellation(MouseEvent mouseEvent) {
-        String selectedConstellation = constellationsListView.getSelectionModel().getSelectedItem();
-        displayConstellationInfo(selectedConstellation);
-    }
-
-    public void backClicked(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("game-menu.fxml")));
-        AudioManager.playAudioAndLoadNextScene(actionEvent, root);
-    }
-
-    public void knowledgeClicked(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("guidebook-knowledge.fxml")));
-        AudioManager.playAudioAndLoadNextScene(actionEvent, root);
-    }
-
-    public void constellationsClicked(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("guidebook-constellations.fxml")));
-        AudioManager.playAudioAndLoadNextScene(actionEvent, root);
-    }
-
-    private int getWinningLineCountFromDB(int constellationId) throws SQLException {
-        String query = "SELECT WinLines FROM constellations WHERE id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, constellationId);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                winningLineCount = resultSet.getInt("WinLines");
-            }
-        }
-        return winningLineCount;
-    }
-
     private int getMainStars(int constellationId) throws SQLException {
         String query = "SELECT MainStars FROM constellations WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -457,5 +468,193 @@ public class GuidebookPractice {
         }
     }
 
+    public void nextConstellationClicked() throws SQLException, IOException {
+        MediaPlayer errorMediaPlayer = AudioManager.getErrorMediaPlayer();
+        if (!AudioManager.mute) {
+            errorMediaPlayer.play();
+        }
+        loadNextConstellation();
+    }
+
+    private int getWinningLineCountFromDB(int constellationId) throws SQLException {
+        String query = "SELECT WinLines FROM constellations WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, constellationId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                winningLineCount = resultSet.getInt("WinLines");
+            }
+        }
+        return winningLineCount;
+    }
+
+    private List<String> getConstellationNames(int levelId) {
+        List<String> constellationNames = new ArrayList<>();
+        try {
+            String query = "SELECT c.Name " +
+                    "FROM constellations c " +
+                    "LEFT JOIN constellations_level cl ON c.id = cl.id_constellation " +
+                    "WHERE cl.id_level = ?";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, levelId);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                constellationNames.add(resultSet.getString("Name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return constellationNames;
+    }
+
+    public void backClicked(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/celestialchronicles/celestialchronicles/game-menu.fxml")));
+        playAudioAndLoadNextScene(actionEvent, root);
+    }
+
+    @FXML
+    public void clueClicked() {
+        if (currentConstellationIndex > 0 && currentConstellationIndex <= constellationNames.size()) {
+            String currentConstellationName = constellationNames.get(currentConstellationIndex - 1);
+            loadClueImage(currentConstellationName);
+        }
+        decrementPoints();
+    }
+
+    @FXML
+    private AnchorPane clue;
+
+    private void loadClueImage(String constellationName) {
+        try {
+            String query = "SELECT CluePic FROM constellations WHERE Name = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, constellationName);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                String cluePicPath = resultSet.getString("CluePic");
+                if (cluePicPath != null && !cluePicPath.isEmpty()) {
+                    ImageView clueImage = new ImageView(new Image(new FileInputStream(cluePicPath)));
+                    clueImage.setFitWidth(clue.getPrefWidth());
+                    clueImage.setFitHeight(clue.getPrefHeight());
+                    clue.getChildren().clear();
+                    clue.getChildren().add(clueImage);
+                }
+            }
+        } catch (SQLException | FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void startTimer() {
+        elapsedTimeSeconds = 0;
+        timer = new Timeline(
+                new KeyFrame(Duration.seconds(1), e -> {
+                    elapsedTimeSeconds++;
+                    updateTimerLabel();
+                })
+        );
+        timer.setCycleCount(Timeline.INDEFINITE);
+        timer.play();
+    }
+
+    private void updateTimerLabel() {
+        timerLabel.setText(String.format("%.0f:%02.0f", elapsedTimeSeconds / 60, elapsedTimeSeconds % 60));
+    }
+
+    private void stopTimer() {
+        timer.stop();
+        saveLevelTimeToDatabase(elapsedTimeSeconds);
+    }
+
+    private void saveLevelTimeToDatabase(double timeSeconds) {
+        try {
+            double bestTime = getBestTimeFromDatabase();
+
+            if (bestTime == 0 || timeSeconds < bestTime) {
+                String query = "UPDATE levels SET best_time = ? WHERE level = ?";
+                PreparedStatement statement = connection.prepareStatement(query);
+                statement.setDouble(1, timeSeconds);
+                statement.setInt(2, LEVEL);
+                statement.executeUpdate();
+            } else {
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private double getBestTimeFromDatabase() throws SQLException {
+        double bestTime = 0;
+
+        String query = "SELECT best_time FROM levels WHERE level = ?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, LEVEL);
+        ResultSet resultSet = statement.executeQuery();
+
+        if (resultSet.next()) {
+            bestTime = resultSet.getDouble("best_time");
+        }
+
+        return bestTime;
+    }
+
+    private void incrementPoints() {
+        points += 1;
+    }
+
+    private void decrementPoints() {
+        points -= 0.5;
+    }
+
+    private void checkAndOpenNextLevel() throws SQLException {
+        if (points >= 3 && LEVEL != 5) {
+            try {
+                String query = "UPDATE levels SET unlocked = 1 WHERE level = ?";
+                PreparedStatement statement = connection.prepareStatement(query);
+                statement.setInt(1, LEVEL + 1);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private double getBestScoreFromDatabase() throws SQLException {
+        double bestScore = 0;
+
+        String query = "SELECT best_score FROM levels WHERE level = ?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, LEVEL);
+        ResultSet resultSet = statement.executeQuery();
+
+        if (resultSet.next()) {
+            bestScore = resultSet.getDouble("best_score");
+        }
+
+        return bestScore;
+    }
+
+    private void saveBestScoreToDatabase() throws SQLException {
+        double bestScore = getBestScoreFromDatabase();
+        try {
+            if (points > bestScore) {
+                String query = "UPDATE levels SET best_score = ? WHERE level = ?";
+                PreparedStatement statement = connection.prepareStatement(query);
+                statement.setDouble(1, points);
+                statement.setInt(2, LEVEL);
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void finishLevel() throws SQLException {
+        saveBestScoreToDatabase();
+        checkAndOpenNextLevel();
+    }
 }
 

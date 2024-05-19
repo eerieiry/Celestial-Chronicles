@@ -6,12 +6,52 @@
     -fx-alignment: center;
 }
 
+.volume-button.muted {
+    -fx-background-image: url('images/volume-mute-fill.png');
+    -fx-background-size: 25px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-min-width: 25px;
+    -fx-min-height: 25px;
+    -fx-background-color: transparent;
+}
+
+.volume-button.muted:hover {
+    -fx-background-image: url('images/volume-mute-fill-hover.png');
+    -fx-background-size: 25px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-min-width: 25px;
+    -fx-min-height: 25px;
+    -fx-background-color: transparent;
+}
+
+.volume-button {
+    -fx-background-image: url('images/volume-up-fill.png');
+    -fx-background-size: 25px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-min-width: 25px;
+    -fx-min-height: 25px;
+    -fx-background-color: transparent;
+}
+
+.volume-button:hover {
+    -fx-background-image: url('images/volume-up-fill-hover.png');
+    -fx-background-size: 25px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-min-width: 25px;
+    -fx-min-height: 25px;
+    -fx-background-color: transparent;
+}
+
 .choice-box{
     -fx-font-family: Montserrat;
     -fx-cursor:pointer;
     -fx-border-color: #ededdf;
 }
-.button{
+.simple-button{
     -fx-background-color: #0b1645;
     -fx-text-fill:  #ededdf;
     -fx-border-color:  #ededdf;
@@ -19,7 +59,7 @@
     -fx-font-family: Montserrat;
     -fx-cursor:pointer;
 }
-.button:hover{
+.simple-button:hover{
     -fx-background-color: #15287a;
     -fx-text-fill:  #ededdf;
     -fx-border-color:  #ededdf;
@@ -94,4 +134,5 @@
 .slider .thumb .thumb-label {
     -fx-text-fill: #e8e8cb;
 }
+
 

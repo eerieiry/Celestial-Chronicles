@@ -3,11 +3,10 @@ package celestialchronicles.celestialchronicles;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.stage.Screen;
 import javafx.scene.image.Image;
-import java.awt.*;
+
 import java.io.IOException;
 import java.util.Objects;
 
@@ -27,6 +26,7 @@ public class MainMenu extends javafx.application.Application {
         stage.setScene(scene);
         stage.show();
     }
+
     public static void main(String[] args) {
         launch();
     }

@@ -10,21 +10,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Objects;
+
 import static celestialchronicles.celestialchronicles.MainMenuController.*;
 
 public class AudioManager {
-    private static double volume = 1.0;
-
-    public static double getVolume() {
-        return volume;
-    }
-
-    public static void setVolume(double newVolume) {
-        volume = newVolume;
-        starClickMediaPlayer.setVolume(volume);
-        successMediaPlayer.setVolume(volume);
-        errorMediaPlayer.setVolume(volume);
-    }
+    public static boolean mute = false;
 
     private static final Media starClick = new Media(Objects.requireNonNull(MainMenuController.class.getResource("star-click.mp3")).toString());
     private static final Media success = new Media(Objects.requireNonNull(MainMenuController.class.getResource("success.mp3")).toString());
@@ -48,28 +38,30 @@ public class AudioManager {
         return errorMediaPlayer;
     }
 
-    public static MediaPlayer mediaPlayer() {
+    public static MediaPlayer getMediaPlayer() {
         return mediaPlayer;
-    }
-
-    public static void setMediaPlayersVolume(double volume) {  // Renamed method to avoid conflict
-        starClickMediaPlayer.setVolume(volume);
-        successMediaPlayer.setVolume(volume);
-        errorMediaPlayer.setVolume(volume);
     }
 
     public static void playAudioAndLoadNextScene(ActionEvent event, Parent root) throws IOException {
         Media sound = new Media(Objects.requireNonNull(MainMenuController.class.getResource("click.mp3")).toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.setOnEndOfMedia(() -> {
+        if (!mute) {
+            MediaPlayer mediaPlayer = new MediaPlayer(sound);
+            mediaPlayer.setOnEndOfMedia(() -> {
+                try {
+                    loadNextScene(event, root);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            mediaPlayer.play();
+        } else {
             try {
                 loadNextScene(event, root);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        });
-
-        mediaPlayer.play();
+        }
     }
 
     public static void loadNextScene(ActionEvent event, Parent root) throws IOException {

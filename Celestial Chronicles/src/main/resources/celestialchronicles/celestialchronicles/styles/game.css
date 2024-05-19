@@ -1,0 +1,45 @@
+* {
+    -fx-font-family: Montserrat;
+    -fx-font-size: 18;
+
+}
+
+.anchor-pane {
+    -fx-alignment: center;
+    -fx-background-color: #080a11;
+}
+
+.main-anchor-pane {
+    -fx-background-color: #080a11;
+}
+
+.pane {
+    -fx-background-color: #ededdf;
+}
+
+.label {
+    -fx-background-color: #080a11;
+    -fx-text-fill: #ededdf;
+    -fx-alignment: center;
+}
+
+.button {
+    -fx-background-color: #080a11;
+    -fx-text-fill: #ededdf;
+    -fx-border-color: #ededdf;
+    -fx-border-radius: 7px;
+    -fx-font-family: Montserrat;
+    -fx-cursor: pointer;
+}
+
+.button:hover {
+    -fx-background-color: #192037;
+    -fx-text-fill: #ededdf;
+    -fx-border-color: #ededdf;
+    -fx-border-radius: 7px;
+    -fx-font-family: Montserrat;
+    -fx-cursor: pointer;
+}
+
+
+

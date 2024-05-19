@@ -1,52 +1,67 @@
-*{
+* {
     -fx-font-family: Montserrat;
+    -fx-background-color: #080a11;
+}
+
+.label {
+    -fx-alignment: center;
     -fx-font-size: 18;
-    -fx-background-color: #142057;
 }
 
 .star-button {
     -fx-background-image: url('images/star.png');
     -fx-background-size: 250px;
-    -fx-font-size: 62;
-    -fx-text-fill:  #0b1645;
+    -fx-font-size: 68;
+    -fx-text-fill: #080a11;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-min-width: 250px;
     -fx-min-height: 250px;
 }
+
 .star-button:hover {
-    -fx-background-image: url('images/star-2.png');
+    -fx-background-image: url('images/star-hover.png');
     -fx-background-size: 250px;
-    -fx-font-size: 62;
-    -fx-text-fill:  #0b1645;
+    -fx-font-size: 68;
+    -fx-text-fill: #080a11;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-min-width: 250px;
     -fx-min-height: 250px;
 }
+
+.star-button.locked {
+    -fx-background-image: url('images/star-blocked.png');
+    -fx-background-size: 250px;
+    -fx-font-size: 68;
+    -fx-text-fill: #080a11;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-min-width: 250px;
+    -fx-min-height: 250px;
+}
+
 .anchor-pane {
     -fx-alignment: center;
 }
 
-.choice-box{
-    -fx-font-family: Montserrat;
-    -fx-cursor:pointer;
+.simple-button {
+    -fx-background-color: #080a11;
+    -fx-text-fill: #ededdf;
     -fx-border-color: #ededdf;
-}
-.simple-button{
-    -fx-background-color: #0b1645;
-    -fx-text-fill:  #ededdf;
-    -fx-border-color:  #ededdf;
     -fx-border-radius: 7px;
     -fx-font-family: Montserrat;
-    -fx-cursor:pointer;
+    -fx-cursor: pointer;
+    -fx-font-size: 18;
 }
-.simple-button:hover{
-    -fx-background-color: #15287a;
-    -fx-text-fill:  #ededdf;
-    -fx-border-color:  #ededdf;
+
+.simple-button:hover {
+    -fx-font-size: 18;
+    -fx-background-color: #192037;
+    -fx-text-fill: #ededdf;
+    -fx-border-color: #ededdf;
     -fx-border-radius: 7px;
     -fx-font-family: Montserrat;
-    -fx-cursor:pointer;
+    -fx-cursor: pointer;
 }
 

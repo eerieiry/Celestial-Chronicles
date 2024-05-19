@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="800.0" prefWidth="600.0" stylesheets="@styles/main-menu.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="celestialchronicles.celestialchronicles.MainMenuController">
+<AnchorPane prefHeight="800.0" prefWidth="600.0" stylesheets="@styles/main-menu.css"
+            xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="celestialchronicles.celestialchronicles.MainMenuController">
     <ImageView>
-        <Image url="@../celestialchronicles/styles/images/background-menu.png" />
+        <Image url="@../celestialchronicles/styles/images/background-menu.png"/>
     </ImageView>
 
-    <Button layoutX="870.0" layoutY="456.0" onAction="#playClicked" prefWidth="181.0" text="Play" />
-    <Button layoutX="870.0" layoutY="520.0" onAction="#settingsClicked" prefWidth="181.0" text="Settings" />
-    <Button layoutX="870.0" layoutY="586.0" onAction="#exitClicked" prefWidth="181.0" text="Exit" />
-   <Label layoutX="569.0" layoutY="194.0" style="-fx-font-size: 92;" text="Celestial Chronicles" />
+    <Button layoutX="870.0" layoutY="456.0" onAction="#playClicked" prefWidth="181.0" styleClass="simple-button"
+            text="Play"/>
+    <Button layoutX="870.0" layoutY="520.0" onAction="#settingsClicked" prefWidth="181.0" styleClass="simple-button"
+            text="Settings"/>
+    <Button layoutX="870.0" layoutY="586.0" onAction="#exitClicked" prefWidth="181.0" styleClass="simple-button"
+            text="Exit"/>
+    <Button fx:id="muteButton" layoutX="14.0" layoutY="14.0" onAction="#muteClicked" prefWidth="55.0"
+            styleClass="volume-button"/>
+    <Label layoutX="569.0" layoutY="194.0" style="-fx-font-size: 92;" text="Celestial Chronicles"/>
+    <Label layoutX="1869.0" layoutY="1039.0" text="1.0.0"/>
 
 </AnchorPane>

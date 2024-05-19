@@ -5,22 +5,21 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.ListView;
-import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Objects;
+
+import static celestialchronicles.celestialchronicles.Database.*;
 
 public class GuidebookConstellations {
     @FXML
@@ -44,22 +43,9 @@ public class GuidebookConstellations {
     @FXML
     private ListView<String> constellationsListView;
 
-    private Connection connection;
-
     public void initialize() {
         connectToDatabase();
         loadConstellations();
-    }
-
-    private void connectToDatabase() {
-        try {
-            String url = "jdbc:mysql://localhost:4044/constellationsdb?user=root";
-            String username = "root";
-            String password = "12345";
-            connection = DriverManager.getConnection(url, username, password);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     private void loadConstellations() {
@@ -84,6 +70,7 @@ public class GuidebookConstellations {
         String searchTerm = searchField.getText();
         displayConstellationInfo(searchTerm);
     }
+
     private void displayConstellationInfo(String searchTerm) {
         try {
             String query = "SELECT * FROM constellations WHERE Name LIKE ?";

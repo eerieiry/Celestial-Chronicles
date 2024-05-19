@@ -19,16 +19,26 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import static celestialchronicles.celestialchronicles.AudioManager.mute;
 import static celestialchronicles.celestialchronicles.AudioManager.playAudioAndLoadNextScene;
 
 public class MainMenuController {
 
-    //Variables for window resolution
     public static double screenWidth = 1920;
     public static double screenHeight = 1080;
     public static boolean fullScreenBool = false;
 
+    @FXML
+    public Button muteButton;
 
+    @FXML
+    void initialize() {
+        if (mute) {
+            muteButton.getStyleClass().add("muted");
+        } else {
+            muteButton.getStyleClass().remove("muted");
+        }
+    }
 
 
     public void showMainMenuScreen(ActionEvent event) throws IOException {
@@ -48,6 +58,7 @@ public class MainMenuController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
+
     @FXML
     private ChoiceBox resolutionChoiceBox;
 
@@ -59,7 +70,10 @@ public class MainMenuController {
 
     @FXML
     public void applyClicked(ActionEvent event) throws IOException {
-
+        MediaPlayer mediaPlayer = AudioManager.getMediaPlayer();
+        if (!AudioManager.mute) {
+            mediaPlayer.play();
+        }
         String selectedSize = (String) resolutionChoiceBox.getValue();
         switch (selectedSize) {
             case "800x600":
@@ -90,13 +104,23 @@ public class MainMenuController {
             case "Full Screen":
                 fullScreenBool = true;
                 break;
-            default: System.out.println("Invalid resolution size");
+            default:
+                System.out.println("Invalid resolution size");
         }
         settingsClicked(event);
     }
 
     @FXML
     public void backClicked(ActionEvent event) throws IOException {
-     showMainMenuScreen(event);
+        showMainMenuScreen(event);
+    }
+
+    public void muteClicked(ActionEvent actionEvent) {
+        if (!mute) {
+            mute = true;
+        } else {
+            mute = false;
+        }
+        initialize();
     }
 }

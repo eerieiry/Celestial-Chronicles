@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="anchorPane" prefHeight="1080.0" prefWidth="1920.0" styleClass="main-anchor-pane"
+            stylesheets="@styles/game.css" xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="celestialchronicles.celestialchronicles.Level">
+    <children>
+        <AnchorPane fx:id="container" layoutX="91.0" layoutY="62.0" prefHeight="906.0" prefWidth="1284.0">
+        </AnchorPane>
+        <AnchorPane fx:id="clue" layoutX="1432.0" layoutY="147.0" prefHeight="338.0" prefWidth="457.0"/>
+        <Label fx:id="name" layoutX="1432.0" layoutY="21.0" prefHeight="41.0" prefWidth="457.0"/>
+        <Label fx:id="timerLabel" layoutX="1432.0" layoutY="100.0" prefHeight="41.0" prefWidth="457.0"/>
+        <Button layoutX="1570.0" layoutY="895.0" onAction="#clueClicked" prefWidth="181.0" text="Clue"/>
+        <Button layoutX="1570.0" layoutY="948.0" onAction="#nextConstellationClicked" prefWidth="181.0" text="Skip"/>
+        <Button layoutX="1570.0" layoutY="1001.0" onAction="#backClicked" prefWidth="181.0" text="Back"/>
+    </children>
+</AnchorPane>
